@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мой Крутой Сайт | Главная</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <!-- Хедер -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="/" class="logo">🚀 MySite</a>
+                <ul class="nav-links">
+                    <li><a href="/">Главная</a></li>
+                    <li><a href="/about">О нас</a></li>
+                    <li><a href="/contact">Контакты</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Герой -->
+    <section class="hero">
+        <div class="container">
+            <h1>Добро пожаловать на мой сайт!</h1>
+            <p>Это современный веб-сайт, созданный с использованием Docker и Flask. Здесь вы найдете много интересного!</p>
+            <a href="/about" class="btn">Узнать больше</a>
+            <a href="/contact" class="btn btn-secondary">Связаться</a>
+        </div>
+    </section>
+
+    <!-- Карточки -->
+    <section class="container">
+        <div class="cards">
+            <div class="card">
+                <div style="font-size: 48px; margin-bottom: 20px;">🎯</div>
+                <h3>Цели проекта</h3>
+                <p>Изучение работы с контейнеризацией, создание веб-приложений и освоение современных технологий разработки.</p>
+            </div>
+            <div class="card">
+                <div style="font-size: 48px; margin-bottom: 20px;">🚀</div>
+                <h3>Технологии</h3>
+                <p>Python, Flask, Docker, HTML, CSS - всё это используется для создания этого замечательного проекта.</p>
+            </div>
+            <div class="card">
+                <div style="font-size: 48px; margin-bottom: 20px;">💡</div>
+                <h3>Возможности</h3>
+                <p>Масштабируемость, простота развёртывания и современный дизайн - вот что делает этот проект особенным.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Футер -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 MySite. Все права защищены.</p>
+            <p>Лабораторная работа по докеру</p>
+        </div>
+    </footer>
+</body>
+</html>

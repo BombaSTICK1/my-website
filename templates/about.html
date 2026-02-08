@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мой Крутой Сайт | О нас</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <!-- Хедер -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="/" class="logo">🚀 MySite</a>
+                <ul class="nav-links">
+                    <li><a href="/">Главная</a></li>
+                    <li><a href="/about">О нас</a></li>
+                    <li><a href="/contact">Контакты</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Секция "О нас" -->
+    <section class="about-section">
+        <div class="container">
+            <h2>О нашем проекте</h2>
+            <p>Этот проект создан в рамках изучения технологии контейнеризации с использованием Docker. Мы стремимся создать современный, красивый и функциональный веб-сайт.</p>
+            
+            <div style="text-align: center; margin-top: 40px;">
+                <h3 style="margin-bottom: 20px;">Что мы используем:</h3>
+                <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 20px; margin-bottom: 40px;">
+                    <div style="background: #667eea; color: white; padding: 15px 30px; border-radius: 10px; font-weight: bold;">
+                        Python
+                    </div>
+                    <div style="background: #764ba2; color: white; padding: 15px 30px; border-radius: 10px; font-weight: bold;">
+                        Flask
+                    </div>
+                    <div style="background: #f093fb; color: white; padding: 15px 30px; border-radius: 10px; font-weight: bold;">
+                        Docker
+                    </div>
+                    <div style="background: #4facfe; color: white; padding: 15px 30px; border-radius: 10px; font-weight: bold;">
+                        HTML/CSS
+                    </div>
+                </div>
+                
+                <a href="/" class="btn" style="margin: 10px;">На главную</a>
+                <a href="/contact" class="btn" style="margin: 10px;">Написать нам</a>
+                <button onclick="showAlert()" class="btn" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); margin: 10px;">
+                    Нажми меня!
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        function showAlert() {
+            alert('🎉 Отлично! Вы нашли секретную кнопку!');
+        }
+    </script>
+
+    <!-- Футер -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 MySite. Все права защищены.</p>
+            <p>Лабораторная работа по докеру</p>
+        </div>
+    </footer>
+</body>
+</html>
