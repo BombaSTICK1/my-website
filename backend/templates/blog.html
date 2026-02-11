@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мой Крутой Сайт | Блог</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .blog-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        
+        .blog-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .blog-header h2 {
+            font-size: 36px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .blog-posts {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .blog-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .blog-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .blog-card h3 {
+            font-size: 22px;
+            color: #667eea;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+        
+        .blog-card p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            flex-grow: 1;
+        }
+        
+        .blog-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #999;
+            font-size: 14px;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+        }
+        
+        .create-form {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        .stats {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .stats h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        
+        .stats p {
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Хедер -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="/" class="logo">🚀 MySite</a>
+                <ul class="nav-links">
+                    <li><a href="/">Главная</a></li>
+                    <li><a href="/about">О нас</a></li>
+                    <li><a href="/blog">Блог</a></li>
+                    <li><a href="/contact">Контакты</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="blog-container">
+        <!-- Статистика -->
+        <div class="stats">
+            <h3>📊 Наш блог</h3>
+            <p>Всего постов: {{ posts|length }}</p>
+        </div>
+
+        <!-- Форма создания поста (если в режиме создания) -->
+        {% if create_mode %}
+        <div class="create-form">
+            <h3 style="margin-bottom: 20px; color: #333;">✍️ Создать новый пост</h3>
+            <form method="POST" action="{{ url_for('create_post') }}">
+                <div class="form-group">
+                    <label for="title">Заголовок *</label>
+                    <input type="text" id="title" name="title" required placeholder="Введите заголовок поста">
+                </div>
+                
+                <div class="form-group">
+                    <label for="content">Содержание *</label>
+                    <textarea id="content" name="content" required placeholder="Введите текст поста..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="author">Автор</label>
+                    <input type="text" id="author" name="author" value="Аноним" placeholder="Ваше имя">
+                </div>
+                
+                <button type="submit" class="btn" style="width: 100%;">Опубликовать пост</button>
+            </form>
+        </div>
+        {% endif %}
+
+        <!-- Список постов -->
+        <div class="blog-header">
+            <h2>📖 Статьи</h2>
+        </div>
+        
+        <div class="blog-posts">
+            {% for post in posts %}
+            <div class="blog-card">
+                <h3 onclick="window.location.href='/blog/{{ post.id }}'" style="margin: 0;">{{ post.title }}</h3>
+                <p>{{ post.content[:150] }}{% if post.content|length > 150 %}...{% endif %}</p>
+                <div class="blog-meta">
+                    <span>👤 {{ post.author }}</span>
+                    <span>👁️ {{ post.views }}</span>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Кнопка создания поста -->
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="{{ url_for('create_post') }}" class="btn">➕ Создать пост</a>
+            <a href="/" class="btn btn-secondary">🏠 На главную</a>
+        </div>
+    </div>
+
+    <!-- Футер -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 MySite. Все права защищены.</p>
+            <p>Лабораторная работа по докеру</p>
+        </div>
+    </footer>
+</body>
+</html>

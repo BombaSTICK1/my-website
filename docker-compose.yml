@@ -1,0 +1,82 @@
+services:
+  # 1. Nginx прокси-сервер
+  nginx:
+    image: nginx:alpine
+    container_name: mywebsite_nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - nginx_logs:/var/log/nginx
+    networks:
+      - frontend_network
+    depends_on:
+      - backend
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "sh", "-c", "wget --quiet --tries=1 --spider http://localhost/health || curl -f http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # 2. Backend (Flask приложение)
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: mywebsite_backend
+    environment:
+      - DATABASE_URL=postgresql://myuser:mypassword@db:5432/mywebsite
+      - FLASK_ENV=production
+    networks:
+      - frontend_network
+      - backend_network
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "sh", "-c", "wget --quiet --tries=1 --spider http://localhost:5000 || curl -f http://localhost:5000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # 3. База данных PostgreSQL
+  db:
+    image: postgres:15-alpine
+    container_name: mywebsite_db
+    environment:
+      - POSTGRES_USER=myuser
+      - POSTGRES_PASSWORD=mypassword
+      - POSTGRES_DB=mywebsite
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks:
+      - backend_network
+    ports:
+      - "127.0.0.1:5432:5432"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U myuser -d mywebsite"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+# Сети
+networks:
+  frontend_network:
+    driver: bridge
+    name: mywebsite_frontend
+  backend_network:
+    driver: bridge
+    name: mywebsite_backend
+    internal: true
+
+# Вolumes
+volumes:
+  postgres_data:
+    name: mywebsite_postgres_data
+  nginx_logs:
+    name: mywebsite_nginx_logs
